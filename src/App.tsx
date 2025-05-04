@@ -10,11 +10,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
-import MapView from "./pages/MapView";
-import Orders from "./pages/Orders";
+import Browse from "./pages/Browse";
+import Cart from "./pages/Cart";
 import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import ProductDetail from "./pages/ProductDetail";
 import AppLayout from "./components/layout/AppLayout";
 
 const queryClient = new QueryClient();
@@ -34,11 +35,15 @@ const App = () => (
             {/* Protected Routes */}
             <Route element={<AppLayout requireAuth />}>
               <Route path="/" element={<Home />} />
-              <Route path="/map" element={<MapView />} />
-              <Route path="/orders" element={<Orders />} />
+              <Route path="/browse" element={<Browse />} />
+              <Route path="/product/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/profile" element={<Profile />} />
             </Route>
+            
+            {/* Default Route */}
+            <Route path="/index" element={<Navigate to="/" />} />
             
             {/* Catch-all Route */}
             <Route path="*" element={<NotFound />} />

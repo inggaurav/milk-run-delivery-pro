@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Map, Package, Bell, UserCircle } from 'lucide-react';
+import { Home, Search, ShoppingCart, Bell, UserCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const BottomNavigation = () => {
@@ -10,8 +10,8 @@ const BottomNavigation = () => {
   
   const navItems = [
     { path: '/', icon: Home, label: 'Home' },
-    { path: '/map', icon: Map, label: 'Map' },
-    { path: '/orders', icon: Package, label: 'Orders' },
+    { path: '/browse', icon: Search, label: 'Browse' },
+    { path: '/cart', icon: ShoppingCart, label: 'Cart' },
     { path: '/notifications', icon: Bell, label: 'Alerts' },
     { path: '/profile', icon: UserCircle, label: 'Profile' }
   ];
