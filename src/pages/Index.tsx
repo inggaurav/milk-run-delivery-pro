@@ -5,7 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const Index = () => {
   const { user } = useAuth();
-
+  
   // The index page simply redirects to the appropriate page based on auth status
   return user ? <Navigate to="/" /> : <Navigate to="/login" />;
 };
