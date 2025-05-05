@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
@@ -12,6 +13,8 @@ import { Separator } from '@/components/ui/separator';
 import DeliveryDaySelector from '@/components/products/DeliveryDaySelector';
 import SubscriptionPlanSelector from '@/components/products/SubscriptionPlanSelector';
 import { useToast } from '@/components/ui/use-toast';
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from '@/components/ui/label';
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -20,6 +23,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [purchaseType, setPurchaseType] = useState('one-time');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedSize, setSelectedSize] = useState('500ml');
   
   // Mock product data (in a real app, fetch this from an API)
   const product = {
@@ -29,6 +33,12 @@ const ProductDetail = () => {
     longDescription: 'Our A2 milk comes from specially selected desi cows that naturally produce A2 protein. Unlike regular milk that contains A1 protein which can cause discomfort, A2 milk is easier to digest and better for your health. Our cows are grass-fed and raised in a free-range environment without antibiotics or hormones.',
     price: 55,
     unit: '500ml',
+    sizes: [
+      { id: '500ml', name: '500ml', price: 55 },
+      { id: '1l', name: '1L', price: 100 },
+      { id: '1.5l', name: '1.5L', price: 145 },
+      { id: '2l', name: '2L', price: 190 },
+    ],
     rating: 4.8,
     reviews: 245,
     category: 'Milk',
@@ -81,8 +91,14 @@ const ProductDetail = () => {
   const incrementQuantity = () => setQuantity(q => q + 1);
   const decrementQuantity = () => setQuantity(q => Math.max(1, q - 1));
   
+  // Get the current size information
+  const getCurrentSize = () => {
+    return product.sizes.find(size => size.id === selectedSize) || product.sizes[0];
+  };
+  
   const calculatePrice = () => {
-    let basePrice = product.price * quantity;
+    const currentSize = getCurrentSize();
+    let basePrice = currentSize.price * quantity;
     
     if (purchaseType !== 'one-time') {
       const option = product.subscriptionOptions.find(opt => opt.id === purchaseType);
@@ -122,9 +138,10 @@ const ProductDetail = () => {
       return;
     }
 
+    const currentSize = getCurrentSize();
     toast({
       title: "Added to cart",
-      description: `${product.name} added to your cart`,
+      description: `${quantity}x ${currentSize.name} ${product.name} added to your cart`,
     });
   };
   
@@ -168,8 +185,8 @@ const ProductDetail = () => {
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <span className="text-2xl font-bold text-sage-800">₹{product.price}</span>
-                <span className="text-sage-500 text-sm ml-1">/ {product.unit}</span>
+                <span className="text-2xl font-bold text-sage-800">₹{getCurrentSize().price}</span>
+                <span className="text-sage-500 text-sm ml-1">/ {getCurrentSize().name}</span>
               </div>
               
               <div className="flex items-center border border-sage-200 rounded-full">
@@ -195,6 +212,30 @@ const ProductDetail = () => {
                   <Plus className="h-3 w-3" />
                 </Button>
               </div>
+            </div>
+            
+            {/* Size Selector */}
+            <div className="mb-4">
+              <h3 className="font-medium text-sage-800 mb-2">Select Size</h3>
+              <RadioGroup 
+                defaultValue={selectedSize}
+                value={selectedSize}
+                onValueChange={setSelectedSize}
+                className="grid grid-cols-2 gap-2"
+              >
+                {product.sizes.map((size) => (
+                  <div key={size.id} className="flex items-center">
+                    <RadioGroupItem value={size.id} id={`size-${size.id}`} className="peer sr-only" />
+                    <Label
+                      htmlFor={`size-${size.id}`}
+                      className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-sage-200 bg-sage-50 p-2 text-center hover:bg-sage-100 peer-data-[state=checked]:border-sage-600 peer-data-[state=checked]:bg-sage-100"
+                    >
+                      <span className="text-sm font-medium">{size.name}</span>
+                      <span className="text-xs text-sage-600">₹{size.price}</span>
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
             </div>
             
             {/* Subscription Plan Selector */}
