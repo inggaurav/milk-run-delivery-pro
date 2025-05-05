@@ -1,12 +1,15 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trash2, Plus, Minus, ChevronRight, Calendar } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import SubscriptionOptionCard from '@/components/cart/SubscriptionOptionCard';
 
 const Cart = () => {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState([
     {
       id: 1,
@@ -36,6 +39,8 @@ const Cart = () => {
       subscription: null
     }
   ]);
+  
+  const [subscriptionOption, setSubscriptionOption] = useState("one-time");
 
   const updateQuantity = (id: number, change: number) => {
     setCartItems(cartItems.map(item => {
@@ -57,7 +62,7 @@ const Cart = () => {
 
   const calculateDiscount = () => {
     // Calculate subscription discounts
-    const discount = cartItems.reduce((sum, item) => {
+    let discount = cartItems.reduce((sum, item) => {
       if (item.subscription) {
         // Parse savings percentage from string (e.g., '10%' -> 0.1)
         const savingsPercentage = parseFloat(item.subscription.savings) / 100;
@@ -66,6 +71,15 @@ const Cart = () => {
       return sum;
     }, 0);
     
+    // Add global subscription discount if applicable
+    if (subscriptionOption === "subscription-weekly") {
+      const subtotal = calculateSubtotal();
+      discount += subtotal * 0.05; // 5% discount for weekly subscription
+    } else if (subscriptionOption === "subscription-monthly") {
+      const subtotal = calculateSubtotal();
+      discount += subtotal * 0.08; // 8% discount for monthly subscription
+    }
+    
     return Math.round(discount);
   };
 
@@ -73,6 +87,17 @@ const Cart = () => {
   const discount = calculateDiscount();
   const deliveryFee = 15;
   const total = subtotal - discount + deliveryFee;
+
+  const handleCheckout = () => {
+    // In a real app, we would process checkout here
+    // For now, just navigate to subscription plans page if they chose a subscription
+    if (subscriptionOption !== "one-time") {
+      navigate('/subscriptions');
+    } else {
+      // Regular checkout flow would continue here
+      console.log("Processing one-time checkout");
+    }
+  };
   
   return (
     <PageContainer className="space-y-5 pb-20">
@@ -149,6 +174,11 @@ const Cart = () => {
             ))}
           </div>
           
+          <SubscriptionOptionCard 
+            selectedOption={subscriptionOption} 
+            onOptionChange={setSubscriptionOption} 
+          />
+          
           <Card className="border-sage-100">
             <CardContent className="p-4 space-y-3">
               <h3 className="font-medium text-sage-800">Order Summary</h3>
@@ -179,11 +209,15 @@ const Cart = () => {
                 </div>
               </div>
               
-              <Button className="w-full">
+              <Button className="w-full" onClick={handleCheckout}>
                 Proceed to Checkout
               </Button>
               
-              <Button variant="outline" className="w-full flex items-center justify-center">
+              <Button 
+                variant="outline" 
+                className="w-full flex items-center justify-center"
+                onClick={() => navigate('/browse')}
+              >
                 <span>Continue Shopping</span>
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
