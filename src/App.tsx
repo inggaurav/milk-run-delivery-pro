@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
-import React from 'react';
+import React, { useState } from 'react';
 
 // Pages
 import Login from "./pages/Login";
@@ -22,7 +22,7 @@ import AppLayout from "./components/layout/AppLayout";
 
 const App = () => {
   // Move QueryClient initialization inside the component
-  const [queryClient] = React.useState(() => new QueryClient({
+  const [queryClient] = useState(() => new QueryClient({
     defaultOptions: {
       queries: {
         retry: false,
