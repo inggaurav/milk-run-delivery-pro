@@ -21,7 +21,14 @@ import AppLayout from "./components/layout/AppLayout";
 
 const App = () => {
   // Move QueryClient initialization inside the component
-  const [queryClient] = React.useState(() => new QueryClient());
+  const [queryClient] = React.useState(() => new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+    },
+  }));
 
   return (
     <QueryClientProvider client={queryClient}>
