@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -137,50 +137,52 @@ const Browse = () => {
         {/* Product Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
           {filteredProducts.map((product) => (
-            <Card key={product.id} className="overflow-hidden border-sage-100 hover:shadow-md transition-all">
-              <CardContent className="p-0">
-                <div className="p-3 space-y-3">
-                  <div className="h-40 bg-sage-50 rounded-lg flex items-center justify-center">
-                    <span className="text-6xl">
-                      {product.category === 'Milk' ? '🥛' : 
-                       product.category === 'Yogurt' ? '🍦' :
-                       product.category === 'Cheese' ? '🧀' :
-                       product.category === 'Butter' ? '🧈' : '🍶'}
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-medium text-sage-800">{product.name}</h3>
-                      <div className="flex items-center text-amber-500">
-                        <Star className="fill-amber-500 stroke-amber-500 h-3 w-3 mr-1" />
-                        <span className="text-xs">{product.rating}</span>
-                      </div>
-                    </div>
-                    <p className="text-sage-500 text-sm line-clamp-2 mt-1">{product.description}</p>
-                    
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {product.tags.map(tag => (
-                        <span key={tag} className="bg-sage-50 text-sage-600 text-xs px-2 py-0.5 rounded-full">
-                          {tag}
-                        </span>
-                      ))}
+            <Link to={`/product/${product.id}`} key={product.id}>
+              <Card className="overflow-hidden border-sage-100 hover:shadow-md transition-all">
+                <CardContent className="p-0">
+                  <div className="p-3 space-y-3">
+                    <div className="h-40 bg-sage-50 rounded-lg flex items-center justify-center">
+                      <span className="text-6xl">
+                        {product.category === 'Milk' ? '🥛' : 
+                         product.category === 'Yogurt' ? '🍦' :
+                         product.category === 'Cheese' ? '🧀' :
+                         product.category === 'Butter' ? '🧈' : '🍶'}
+                      </span>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-3">
-                      <div>
-                        <span className="font-medium text-sage-800">₹{product.price}</span>
-                        <span className="text-xs text-sage-500 ml-1">/{product.unit}</span>
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-medium text-sage-800">{product.name}</h3>
+                        <div className="flex items-center text-amber-500">
+                          <Star className="fill-amber-500 stroke-amber-500 h-3 w-3 mr-1" />
+                          <span className="text-xs">{product.rating}</span>
+                        </div>
                       </div>
-                      <Button size="sm" className="rounded-full flex gap-1">
-                        <ShoppingCart className="h-4 w-4" />
-                        Add
-                      </Button>
+                      <p className="text-sage-500 text-sm line-clamp-2 mt-1">{product.description}</p>
+                      
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {product.tags.map(tag => (
+                          <span key={tag} className="bg-sage-50 text-sage-600 text-xs px-2 py-0.5 rounded-full">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-3">
+                        <div>
+                          <span className="font-medium text-sage-800">₹{product.price}</span>
+                          <span className="text-xs text-sage-500 ml-1">/{product.unit}</span>
+                        </div>
+                        <Button size="sm" className="rounded-full flex gap-1">
+                          <ShoppingCart className="h-4 w-4" />
+                          Add
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
         
