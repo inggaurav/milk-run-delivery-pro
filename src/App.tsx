@@ -17,6 +17,7 @@ import Notifications from "./pages/Notifications";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
+import SubscriptionPlans from "./pages/SubscriptionPlans";
 import AppLayout from "./components/layout/AppLayout";
 
 const App = () => {
@@ -47,6 +48,7 @@ const App = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/browse" element={<Browse />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/subscriptions" element={<SubscriptionPlans />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/profile" element={<Profile />} />

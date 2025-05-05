@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -188,9 +188,11 @@ const Home = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-sage-800">Subscription Plans</h2>
-          <Button variant="ghost" className="text-sage-600 p-0 h-auto font-medium text-sm flex items-center">
-            See All <ChevronRight className="h-4 w-4 ml-1" />
-          </Button>
+          <Link to="/subscriptions">
+            <Button variant="ghost" className="text-sage-600 p-0 h-auto font-medium text-sm flex items-center">
+              See All <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </Link>
         </div>
         
         <Carousel className="w-full">
@@ -221,9 +223,11 @@ const Home = () => {
                       className="h-1.5 mt-3" 
                       indicatorClassName={plan.color}
                     />
-                    <Button className="mt-4 w-full" variant={plan.popular ? "default" : "outline"}>
-                      Subscribe Now
-                    </Button>
+                    <Link to="/subscriptions">
+                      <Button className="mt-4 w-full" variant={plan.popular ? "default" : "outline"}>
+                        Subscribe Now
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               </CarouselItem>

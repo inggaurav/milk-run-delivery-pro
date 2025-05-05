@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Link } from 'react-router-dom';
 import { 
   ChevronLeft, ShoppingCart, Star, Plus, Minus, 
   Calendar, CheckCircle, Award, User, ThumbsUp 
@@ -240,6 +240,10 @@ const ProductDetail = () => {
             
             {/* Subscription Plan Selector */}
             <div className="mb-4">
+              <div className="flex justify-between items-center">
+                <h3 className="font-medium text-sage-800">Purchase Options</h3>
+                <Link to="/subscriptions" className="text-sage-600 text-sm underline">View all plans</Link>
+              </div>
               <SubscriptionPlanSelector 
                 plans={product.subscriptionOptions}
                 selectedPlan={purchaseType}
