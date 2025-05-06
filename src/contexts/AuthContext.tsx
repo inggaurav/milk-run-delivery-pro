@@ -9,6 +9,7 @@ type User = {
   phone: string;
   profileImage?: string;
   isOnline: boolean;
+  role?: 'user' | 'admin';
   deliveryRating?: number;
   completedDeliveries?: number;
 };
@@ -20,6 +21,7 @@ type AuthContextType = {
   register: (name: string, email: string, phone: string, password: string) => Promise<void>;
   logout: () => void;
   updateOnlineStatus: (status: boolean) => void;
+  isAdmin: () => boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -46,13 +48,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       if (email === 'demo@milk.com' && password === 'password') {
         const user: User = {
           id: '1',
-          name: 'Demo Driver',
+          name: 'Demo User',
           email,
           phone: '555-123-4567',
           isOnline: true,
           profileImage: '/assets/profile.jpg',
-          deliveryRating: 4.8,
-          completedDeliveries: 127
+          role: 'admin', // Admin role for demo user
         };
         
         setUser(user);
@@ -81,8 +82,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         email,
         phone,
         isOnline: true,
-        deliveryRating: 5.0,
-        completedDeliveries: 0
+        role: 'user'
       };
       
       setUser(user);
@@ -111,8 +111,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const isAdmin = () => {
+    return user?.role === 'admin' || user?.email === 'demo@milk.com';
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout, updateOnlineStatus }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout, updateOnlineStatus, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

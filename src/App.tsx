@@ -23,6 +23,13 @@ import AppLayout from "./components/layout/AppLayout";
 import MapView from "./pages/MapView";
 import Orders from "./pages/Orders";
 
+// Admin Pages
+import AdminLayout from "./components/layout/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import ProductManagement from "./pages/admin/ProductManagement";
+import MediaManagement from "./pages/admin/MediaManagement";
+import AppSettings from "./pages/admin/AppSettings";
+
 const App = () => {
   // Move QueryClient initialization inside the component
   const [queryClient] = useState(() => new QueryClient({
@@ -58,6 +65,15 @@ const App = () => {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/map" element={<MapView />} />
                 <Route path="/orders" element={<Orders />} />
+              </Route>
+              
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="products" element={<ProductManagement />} />
+                <Route path="media" element={<MediaManagement />} />
+                <Route path="settings" element={<AppSettings />} />
+                <Route path="*" element={<Navigate to="/admin" replace />} />
               </Route>
               
               {/* Default Route */}
