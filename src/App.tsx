@@ -20,6 +20,8 @@ import ProductDetail from "./pages/ProductDetail";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
 import SubscriptionTracking from "./pages/SubscriptionTracking";
 import AppLayout from "./components/layout/AppLayout";
+import MapView from "./pages/MapView";
+import Orders from "./pages/Orders";
 
 const App = () => {
   // Move QueryClient initialization inside the component
@@ -54,6 +56,8 @@ const App = () => {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/map" element={<MapView />} />
+                <Route path="/orders" element={<Orders />} />
               </Route>
               
               {/* Default Route */}

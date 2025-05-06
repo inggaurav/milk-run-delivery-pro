@@ -34,41 +34,41 @@ const MapView = () => {
           <div className="relative">
             <Input 
               className="w-full bg-white pl-10 pr-4 py-2 rounded-xl shadow-md border-sage-100"
-              placeholder="Search location..."
+              placeholder="Search nearby stores..."
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-sage-400 h-5 w-5" />
           </div>
         </div>
         
-        {/* Route Information */}
+        {/* Nearby Store Information */}
         <Card className="absolute bottom-20 left-4 right-4 p-4 bg-white rounded-xl shadow-lg border-sage-100">
           <div className="flex items-center gap-3 mb-3">
             <div className="bg-sage-100 p-2 rounded-full">
-              <Navigation className="h-5 w-5 text-sage-600" />
+              <MapPin className="h-5 w-5 text-sage-600" />
             </div>
             <div>
-              <h3 className="font-medium">Route Overview</h3>
-              <p className="text-sm text-sage-500">3 deliveries · 4.5 miles total</p>
+              <h3 className="font-medium">Nearby Stores</h3>
+              <p className="text-sm text-sage-500">Find fresh milk near you</p>
             </div>
           </div>
           
           <div className="space-y-2 mb-3">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-sage-500 rounded-full"></div>
-              <p className="text-sm">123 Oak Street, Greenville</p>
+              <p className="text-sm">Greenville Dairy Shop - 0.8 mi</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-sage-500 rounded-full"></div>
-              <p className="text-sm">456 Maple Avenue, Greenville</p>
+              <p className="text-sm">Farm Fresh Store - 1.2 mi</p>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-sage-500 rounded-full"></div>
-              <p className="text-sm">789 Pine Road, Greenville</p>
+              <p className="text-sm">Organic Market - 2.5 mi</p>
             </div>
           </div>
           
           <Button className="w-full bg-sage-500 hover:bg-sage-600 text-white">
-            Start Navigation
+            Find Nearest Store
           </Button>
         </Card>
       </div>

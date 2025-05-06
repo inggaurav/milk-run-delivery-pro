@@ -10,16 +10,16 @@ const Notifications = () => {
   const notifications = [
     {
       id: 1,
-      title: 'New Order Assigned',
-      message: 'You have been assigned order #ORD-004 for delivery between 2:00 PM - 3:00 PM.',
+      title: 'Order Confirmed',
+      message: 'Your order #ORD-004 has been confirmed and will be delivered on May 10, 2:00 PM - 3:00 PM.',
       time: '10 minutes ago',
       type: 'info',
       read: false
     },
     {
       id: 2,
-      title: 'Order Ready for Pickup',
-      message: 'Order #ORD-001 is ready for pickup at the warehouse.',
+      title: 'Order Delivered',
+      message: 'Your order #ORD-001 has been delivered. Enjoy your fresh milk!',
       time: '30 minutes ago',
       type: 'success',
       read: false
@@ -27,15 +27,15 @@ const Notifications = () => {
     {
       id: 3,
       title: 'Weather Alert',
-      message: 'Heavy rain expected in your delivery area. Drive safely and plan accordingly.',
+      message: 'Heavy rain expected in your area. Your delivery might be delayed.',
       time: '1 hour ago',
       type: 'warning',
       read: false
     },
     {
       id: 4,
-      title: 'Weekly Performance Report',
-      message: 'Your weekly performance report is available. Great job on maintaining a 5-star rating!',
+      title: 'Weekly Subscription Update',
+      message: 'Your weekly subscription will renew in 2 days. Make sure your payment method is up to date.',
       time: '1 day ago',
       type: 'info',
       read: true
@@ -77,7 +77,7 @@ const Notifications = () => {
           <h1 className="text-2xl font-bold text-sage-800">Notifications</h1>
           <Badge className="bg-sage-500">{notifications.filter(n => !n.read).length} new</Badge>
         </div>
-        <p className="text-sage-500 mt-1">Stay updated with your delivery information</p>
+        <p className="text-sage-500 mt-1">Stay updated with your orders and subscriptions</p>
       </div>
 
       <div className="space-y-4">
