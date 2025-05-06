@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { PaymentGatewayControl } from '@/components/admin/PaymentGatewayControl';
+import PaymentGatewayControl from '@/components/admin/PaymentGatewayControl';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -168,7 +168,7 @@ const AppSettings = () => {
                     id="notification-template" 
                     defaultValue="Thank you for your order #{{orderNumber}}. Your delivery is scheduled for {{deliveryDate}}." 
                   />
-                  <p className="text-xs text-sage-500">Use {{variables}} for dynamic content</p>
+                  <p className="text-xs text-sage-500">Use {{orderNumber}} or {{deliveryDate}} for dynamic content</p>
                 </div>
                 
                 <Button type="submit" className="bg-sage-600 hover:bg-sage-700">
