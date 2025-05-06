@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import PageContainer from '@/components/layout/PageContainer';
@@ -7,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from 'react-router-dom';
 import { 
   ChevronLeft, ShoppingCart, Star, Plus, Minus, 
-  Calendar, CheckCircle, Award, User, ThumbsUp 
+  Calendar, CheckCircle, Award, User, ThumbsUp, Heart, Share2
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import DeliveryDaySelector from '@/components/products/DeliveryDaySelector';
@@ -24,39 +25,37 @@ const ProductDetail = () => {
   const [purchaseType, setPurchaseType] = useState('one-time');
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState('500ml');
+  const [isFavorite, setIsFavorite] = useState(false);
   
   // Mock product data (in a real app, fetch this from an API)
   const product = {
     id: 1,
-    name: 'Organic A2 Milk',
-    description: 'Farm-fresh organic A2 milk from grass-fed cows. Rich in nutrients and easy to digest.',
-    longDescription: 'Our A2 milk comes from specially selected desi cows that naturally produce A2 protein. Unlike regular milk that contains A1 protein which can cause discomfort, A2 milk is easier to digest and better for your health. Our cows are grass-fed and raised in a free-range environment without antibiotics or hormones.',
-    price: 55,
-    unit: '500ml',
+    name: 'Maftoul & Mozarella',
+    description: 'Delicious fresh salad with maftoul and mozarella cheese',
+    longDescription: 'Our fresh salad comes with specially selected organic ingredients. The maftoul is cooked to perfection and combined with fresh mozarella cheese, crisp vegetables, and a light vinaigrette dressing.',
+    price: 160,
+    unit: 'g',
     sizes: [
-      { id: '500ml', name: '500ml', price: 55 },
-      { id: '1l', name: '1L', price: 100 },
-      { id: '1.5l', name: '1.5L', price: 145 },
-      { id: '2l', name: '2L', price: 190 },
+      { id: '250g', name: '250g', price: 120 },
+      { id: '500g', name: '500g', price: 160 },
+      { id: '750g', name: '750g', price: 220 },
     ],
-    rating: 4.8,
+    rating: 4.7,
     reviews: 245,
-    category: 'Milk',
-    bannerImage: 'https://images.unsplash.com/photo-1482938289607-e9573fc25ebb',
+    category: 'Salad',
+    bannerImage: '/lovable-uploads/0a52b594-92b1-462d-b756-09370f2d7f95.png',
     nutrition: [
-      { name: 'Calories', value: '67 kcal' },
-      { name: 'Protein', value: '3.3g' },
-      { name: 'Fat', value: '4.0g' },
-      { name: 'Carbohydrates', value: '4.8g' },
-      { name: 'Calcium', value: '120mg' },
-      { name: 'Vitamin D', value: '2.4µg' },
+      { name: 'Protein', value: '160g' },
+      { name: 'Carbs', value: '45g' },
+      { name: 'Kcal', value: '451' },
+      { name: 'Fat', value: '54g' },
     ],
     benefits: [
-      'Easier to digest than regular milk',
       'Rich in essential nutrients',
       'No added preservatives',
       'Supports local farmers',
       'Environmentally sustainable',
+      'Perfect balance of protein and carbs',
     ],
     subscriptionOptions: [
       { id: 'daily', name: 'Daily Delivery', savings: '10%' },
@@ -65,15 +64,15 @@ const ProductDetail = () => {
       { id: 'custom', name: 'Custom Days', savings: '5%' },
     ],
     relatedProducts: [
-      { id: 2, name: 'Greek Yogurt', price: 65, unit: '400g', icon: '🍦' },
-      { id: 3, name: 'Fresh Paneer', price: 120, unit: '200g', icon: '🧀' },
+      { id: 2, name: 'Mixed Best Salad', price: 145, unit: 'g', icon: '🥗' },
+      { id: 3, name: 'Thai Chicken Salad', price: 180, unit: 'g', icon: '🍲' },
     ],
     userReviews: [
       { 
         id: 1, 
         user: 'Priya S.', 
         rating: 5, 
-        comment: 'Best milk I\'ve tried. Tastes fresh and my kids love it!',
+        comment: 'Best salad I\'ve tried. Tastes fresh and my kids love it!',
         date: '2 days ago',
         helpful: 12
       },
@@ -147,56 +146,145 @@ const ProductDetail = () => {
   
   return (
     <PageContainer className="pb-20 p-0">
-      {/* Banner Image */}
-      <div 
-        className="w-full h-64 bg-center bg-cover"
-        style={{ 
-          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${product.bannerImage})` 
-        }}
-      >
-        <div className="p-4 h-full flex flex-col justify-between">
-          <Button 
-            variant="outline" 
-            size="sm"
-            className="w-8 h-8 p-0 rounded-full bg-white/80 backdrop-blur-sm self-start"
-            onClick={() => navigate(-1)}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          
-          <div className="text-white">
-            <h1 className="text-3xl font-bold drop-shadow-lg">{product.name}</h1>
-            <div className="flex items-center mt-1">
-              <div className="flex items-center text-amber-300 mr-3">
-                <Star className="fill-amber-300 stroke-amber-300 h-4 w-4 mr-1" />
-                <span className="text-sm font-medium drop-shadow-md">{product.rating}</span>
-              </div>
-              <span className="text-white/90 text-sm drop-shadow-md">{product.reviews} reviews</span>
-            </div>
-          </div>
+      {/* Header with back button */}
+      <div className="bg-sage-500 text-white p-4 flex items-center justify-between">
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="w-8 h-8 p-0 rounded-full bg-white/20 hover:bg-white/30 text-white"
+          onClick={() => navigate(-1)}
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </Button>
+        <div className="text-lg font-medium">Details</div>
+        <Button 
+          variant="ghost" 
+          size="sm"
+          className="w-8 h-8 p-0 rounded-full bg-white/20 hover:bg-white/30 text-white"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-more-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+        </Button>
+      </div>
+      
+      {/* Product Image */}
+      <div className="w-full flex justify-center bg-sage-500 pt-4 pb-12 rounded-b-[40px]">
+        <div className="w-64 h-64 rounded-full bg-white overflow-hidden flex items-center justify-center">
+          <img 
+            src={product.bannerImage} 
+            alt={product.name} 
+            className="w-full h-full object-cover"
+          />
         </div>
       </div>
       
-      <div className="p-4">
-        <p className="text-sage-700 mb-4">{product.description}</p>
+      {/* Product Info */}
+      <div className="px-5 -mt-6">
+        {/* Product Name and Rating */}
+        <Card className="border-none shadow-lg rounded-3xl">
+          <CardContent className="p-5">
+            <h1 className="text-2xl font-bold text-center mb-1">{product.name}</h1>
+            
+            <div className="flex items-center justify-center mb-6">
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`h-4 w-4 ${i < Math.floor(product.rating) ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`} 
+                  />
+                ))}
+              </div>
+              <span className="text-amber-500 ml-2 font-medium">{product.rating}</span>
+            </div>
+            
+            {/* Nutrition Info */}
+            <div className="grid grid-cols-4 gap-2 mb-6">
+              {product.nutrition.map((item, index) => (
+                <div 
+                  key={index} 
+                  className={`rounded-xl p-3 text-center ${
+                    index === 0 ? 'bg-red-100 text-red-500' :
+                    index === 1 ? 'bg-blue-100 text-blue-500' :
+                    index === 2 ? 'bg-amber-100 text-amber-500' : 'bg-green-100 text-green-500'
+                  }`}
+                >
+                  <div className="font-bold text-lg">{item.value}</div>
+                  <div className="text-xs">{item.name}</div>
+                </div>
+              ))}
+            </div>
+            
+            {/* Description */}
+            <div className="mb-6">
+              <h3 className="font-bold text-lg mb-2">Description</h3>
+              <p className="text-gray-600">{product.longDescription}</p>
+            </div>
+            
+            {/* Action buttons */}
+            <div className="flex justify-between mb-2">
+              <Button
+                className={`w-12 h-12 rounded-full p-0 ${isFavorite ? 'bg-red-50 text-red-500 hover:bg-red-100' : 'bg-gray-100 text-gray-500 hover:bg-gray-200'}`}
+                variant="ghost"
+                onClick={() => setIsFavorite(!isFavorite)}
+              >
+                <Heart className={`w-5 h-5 ${isFavorite ? 'fill-red-500' : ''}`} />
+              </Button>
+              
+              <Button 
+                className="bg-sage-500 hover:bg-sage-600 flex-1 mx-3 rounded-full text-white"
+                onClick={handleAddToCart}
+              >
+                <ShoppingCart className="h-4 w-4 mr-2" />
+                Add to Cart
+              </Button>
+              
+              <Button
+                className="w-12 h-12 rounded-full p-0 bg-gray-100 text-gray-500 hover:bg-gray-200"
+                variant="ghost"
+              >
+                <Share2 className="w-5 h-5" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
         
-        {/* Price & Add to Cart */}
-        <Card className="mb-6 border-sage-100">
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between mb-4">
+        {/* Size Selection */}
+        <Card className="border-none shadow-md rounded-3xl mt-5">
+          <CardContent className="p-5">
+            <h3 className="font-bold text-lg mb-3">Select Size</h3>
+            <RadioGroup 
+              defaultValue={selectedSize}
+              value={selectedSize}
+              onValueChange={setSelectedSize}
+              className="grid grid-cols-3 gap-3"
+            >
+              {product.sizes.map((size) => (
+                <div key={size.id} className="flex items-center">
+                  <RadioGroupItem value={size.id} id={`size-${size.id}`} className="peer sr-only" />
+                  <Label
+                    htmlFor={`size-${size.id}`}
+                    className="flex flex-col flex-1 cursor-pointer items-center justify-center rounded-xl border border-sage-100 py-2 text-center hover:bg-sage-50 peer-data-[state=checked]:border-sage-500 peer-data-[state=checked]:bg-sage-50"
+                  >
+                    <span className="font-medium">{size.name}</span>
+                    <span className="text-xs text-sage-600">₹{size.price}</span>
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+            
+            <div className="flex items-center justify-between mt-5">
               <div>
-                <span className="text-2xl font-bold text-sage-800">₹{getCurrentSize().price}</span>
-                <span className="text-sage-500 text-sm ml-1">/ {getCurrentSize().name}</span>
+                <p className="text-gray-500 text-sm">Total price</p>
+                <p className="text-xl font-bold">₹{calculatePrice().toFixed(2)}</p>
               </div>
               
-              <div className="flex items-center border border-sage-200 rounded-full">
+              <div className="flex items-center border border-sage-200 rounded-full px-2 bg-gray-50">
                 <Button 
                   variant="ghost" 
                   size="icon" 
                   className="h-8 w-8 rounded-full p-0 text-sage-500"
                   onClick={decrementQuantity}
                 >
-                  <Minus className="h-3 w-3" />
+                  <Minus className="h-4 w-4" />
                 </Button>
                 
                 <span className="w-8 text-center font-medium">
@@ -209,208 +297,12 @@ const ProductDetail = () => {
                   className="h-8 w-8 rounded-full p-0 text-sage-500"
                   onClick={incrementQuantity}
                 >
-                  <Plus className="h-3 w-3" />
+                  <Plus className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-            
-            {/* Size Selector */}
-            <div className="mb-4">
-              <h3 className="font-medium text-sage-800 mb-2">Select Size</h3>
-              <RadioGroup 
-                defaultValue={selectedSize}
-                value={selectedSize}
-                onValueChange={setSelectedSize}
-                className="grid grid-cols-2 gap-2"
-              >
-                {product.sizes.map((size) => (
-                  <div key={size.id} className="flex items-center">
-                    <RadioGroupItem value={size.id} id={`size-${size.id}`} className="peer sr-only" />
-                    <Label
-                      htmlFor={`size-${size.id}`}
-                      className="flex flex-1 cursor-pointer items-center justify-between rounded-md border border-sage-200 bg-sage-50 p-2 text-center hover:bg-sage-100 peer-data-[state=checked]:border-sage-600 peer-data-[state=checked]:bg-sage-100"
-                    >
-                      <span className="text-sm font-medium">{size.name}</span>
-                      <span className="text-xs text-sage-600">₹{size.price}</span>
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-            
-            {/* Subscription Plan Selector */}
-            <div className="mb-4">
-              <div className="flex justify-between items-center">
-                <h3 className="font-medium text-sage-800">Purchase Options</h3>
-                <Link to="/subscriptions" className="text-sage-600 text-sm underline">View all plans</Link>
-              </div>
-              <SubscriptionPlanSelector 
-                plans={product.subscriptionOptions}
-                selectedPlan={purchaseType}
-                onPlanChange={handleSubscriptionChange}
-              />
-            </div>
-            
-            {/* Custom Days Selector - only show when 'custom' plan is selected */}
-            {purchaseType === 'custom' && (
-              <div className="mb-4">
-                <DeliveryDaySelector 
-                  selectedDays={selectedDays}
-                  onDayToggle={handleDayToggle}
-                />
-              </div>
-            )}
-            
-            <div className="flex items-center justify-between text-sm mb-4">
-              <span className="text-sage-600">Total Price:</span>
-              <span className="font-bold text-sage-800">₹{calculatePrice().toFixed(2)}</span>
-            </div>
-            
-            <Button 
-              className="w-full flex items-center justify-center gap-2"
-              onClick={handleAddToCart}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              Add to Cart
-            </Button>
           </CardContent>
         </Card>
-        
-        {/* Product Details Tabs */}
-        <Tabs defaultValue="description" className="mb-6">
-          <TabsList className="grid grid-cols-3 w-full bg-sage-50">
-            <TabsTrigger value="description">Description</TabsTrigger>
-            <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="description" className="mt-4 space-y-4">
-            <p className="text-sage-700">{product.longDescription}</p>
-            
-            <div>
-              <h3 className="font-medium text-sage-800 mb-2">Benefits</h3>
-              <ul className="space-y-2">
-                {product.benefits.map((benefit, index) => (
-                  <li key={index} className="flex items-start">
-                    <CheckCircle className="h-4 w-4 text-sage-500 mr-2 mt-0.5 shrink-0" />
-                    <span className="text-sage-700 text-sm">{benefit}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-medium text-sage-800 mb-2">Quality Assurance</h3>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center bg-sage-50 rounded-lg p-2">
-                  <Award className="h-5 w-5 text-sage-600 mr-2" />
-                  <span className="text-sm text-sage-700">Certified Organic</span>
-                </div>
-                <div className="flex items-center bg-sage-50 rounded-lg p-2">
-                  <CheckCircle className="h-5 w-5 text-sage-600 mr-2" />
-                  <span className="text-sm text-sage-700">Quality Tested</span>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="nutrition" className="mt-4">
-            <Card className="border-sage-100">
-              <CardContent className="p-3">
-                <h3 className="font-medium text-sage-800 mb-2">Nutritional Information</h3>
-                <p className="text-sage-500 text-sm mb-3">Per 100ml serving</p>
-                
-                <div className="space-y-2">
-                  {product.nutrition.map((item, index) => (
-                    <div key={index} className="flex justify-between text-sm py-1 border-b border-sage-100 last:border-b-0">
-                      <span className="text-sage-600">{item.name}</span>
-                      <span className="font-medium text-sage-700">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-            
-            <div className="text-xs text-sage-500 mt-2">
-              * Percent Daily Values are based on a 2,000 calorie diet.
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="reviews" className="mt-4">
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <div className="flex items-center text-amber-500">
-                  <Star className="fill-amber-500 stroke-amber-500 h-5 w-5 mr-1" />
-                  <span className="text-xl font-bold">{product.rating}</span>
-                </div>
-                <p className="text-sm text-sage-500">Based on {product.reviews} reviews</p>
-              </div>
-              
-              <Button size="sm">Write a Review</Button>
-            </div>
-            
-            <div className="space-y-4">
-              {product.userReviews.map((review) => (
-                <Card key={review.id} className="border-sage-100">
-                  <CardContent className="p-3">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center">
-                        <div className="bg-sage-100 rounded-full p-1">
-                          <User className="h-4 w-4 text-sage-500" />
-                        </div>
-                        <span className="font-medium text-sage-800 ml-2">{review.user}</span>
-                      </div>
-                      
-                      <div className="flex items-center text-amber-500">
-                        {[...Array(5)].map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-3 w-3 ${i < review.rating ? 'fill-amber-500' : 'fill-gray-200'} stroke-none`} 
-                          />
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <p className="text-sage-700 text-sm">{review.comment}</p>
-                    
-                    <div className="flex items-center justify-between mt-2 text-xs">
-                      <span className="text-sage-500">{review.date}</span>
-                      
-                      <Button variant="ghost" size="sm" className="h-6 text-sage-500 hover:text-sage-700">
-                        <ThumbsUp className="h-3 w-3 mr-1" />
-                        Helpful ({review.helpful})
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
-        
-        {/* Related Products */}
-        <div className="space-y-3 pb-4">
-          <h2 className="text-lg font-medium text-sage-800">You may also like</h2>
-          
-          <div className="grid grid-cols-2 gap-3">
-            {product.relatedProducts.map(item => (
-              <Card key={item.id} className="overflow-hidden border-sage-100">
-                <CardContent className="p-2">
-                  <div className="bg-sage-50 h-20 w-full rounded flex items-center justify-center mb-2">
-                    <span className="text-3xl">{item.icon}</span>
-                  </div>
-                  <h3 className="font-medium text-sage-800 text-sm">{item.name}</h3>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-sm">₹{item.price}/{item.unit}</span>
-                    <Button size="sm" variant="ghost" className="h-7 w-7 p-0 rounded-full">
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
       </div>
     </PageContainer>
   );
