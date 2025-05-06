@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Trash2, Plus, Minus, ChevronRight, Calendar } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import SubscriptionOptionCard from '@/components/cart/SubscriptionOptionCard';
+import PaymentOptions from '@/components/cart/PaymentOptions';
+import { toast } from 'sonner';
+import { initiateRazorpayPayment, initiatePhonePePayment } from '@/services/paymentService';
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -41,6 +44,8 @@ const Cart = () => {
   ]);
   
   const [subscriptionOption, setSubscriptionOption] = useState("one-time");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const updateQuantity = (id: number, change: number) => {
     setCartItems(cartItems.map(item => {
@@ -89,13 +94,51 @@ const Cart = () => {
   const total = subtotal - discount + deliveryFee;
 
   const handleCheckout = () => {
-    // In a real app, we would process checkout here
-    // For now, just navigate to subscription plans page if they chose a subscription
-    if (subscriptionOption !== "one-time") {
-      navigate('/subscriptions');
+    if (!paymentMethod) {
+      toast.error("Please select a payment method");
+      return;
+    }
+    
+    setIsProcessing(true);
+    
+    // Generate a mock order ID
+    const orderId = `order_${Math.random().toString(36).substring(2, 15)}`;
+    
+    const handlePaymentSuccess = (paymentId: string) => {
+      toast.success("Payment successful!");
+      setIsProcessing(false);
+      
+      // If subscription was selected, redirect to subscription tracking
+      if (subscriptionOption !== "one-time") {
+        navigate('/subscription-tracking');
+      } else {
+        // For one-time orders, you could redirect to an order confirmation page
+        console.log("Processing one-time checkout with payment ID:", paymentId);
+        navigate('/');
+      }
+    };
+    
+    const handlePaymentFailure = (error: any) => {
+      toast.error("Payment failed. Please try again.");
+      console.error("Payment error:", error);
+      setIsProcessing(false);
+    };
+    
+    // Process payment based on selected method
+    if (paymentMethod === "razorpay") {
+      initiateRazorpayPayment(total, orderId, handlePaymentSuccess, handlePaymentFailure);
+    } else if (paymentMethod === "phonepe") {
+      initiatePhonePePayment(total, orderId, handlePaymentSuccess, handlePaymentFailure);
     } else {
-      // Regular checkout flow would continue here
-      console.log("Processing one-time checkout");
+      // Cash on delivery
+      toast.success("Order placed successfully!");
+      setIsProcessing(false);
+      
+      if (subscriptionOption !== "one-time") {
+        navigate('/subscription-tracking');
+      } else {
+        navigate('/');
+      }
     }
   };
   
@@ -179,6 +222,11 @@ const Cart = () => {
             onOptionChange={setSubscriptionOption} 
           />
           
+          <PaymentOptions
+            selectedOption={paymentMethod}
+            onOptionChange={setPaymentMethod}
+          />
+          
           <Card className="border-sage-100">
             <CardContent className="p-4 space-y-3">
               <h3 className="font-medium text-sage-800">Order Summary</h3>
@@ -209,14 +257,19 @@ const Cart = () => {
                 </div>
               </div>
               
-              <Button className="w-full" onClick={handleCheckout}>
-                Proceed to Checkout
+              <Button 
+                className="w-full" 
+                onClick={handleCheckout} 
+                disabled={isProcessing}
+              >
+                {isProcessing ? "Processing..." : "Proceed to Checkout"}
               </Button>
               
               <Button 
                 variant="outline" 
                 className="w-full flex items-center justify-center"
                 onClick={() => navigate('/browse')}
+                disabled={isProcessing}
               >
                 <span>Continue Shopping</span>
                 <ChevronRight className="h-4 w-4 ml-1" />

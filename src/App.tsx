@@ -18,6 +18,7 @@ import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import ProductDetail from "./pages/ProductDetail";
 import SubscriptionPlans from "./pages/SubscriptionPlans";
+import SubscriptionTracking from "./pages/SubscriptionTracking";
 import AppLayout from "./components/layout/AppLayout";
 
 const App = () => {
@@ -49,6 +50,7 @@ const App = () => {
                 <Route path="/browse" element={<Browse />} />
                 <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/subscriptions" element={<SubscriptionPlans />} />
+                <Route path="/subscription-tracking" element={<SubscriptionTracking />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/profile" element={<Profile />} />
